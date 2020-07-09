@@ -1,5 +1,5 @@
 {
-  "name": "@thiagodelgado/yup-phone",
+  "name": "@thiagodelgado111/yup-phone",
   "description": "Adds a phone number validation check to yup validator using google-libphonenumber.",
   "version": "0.0.1",
   "main": "dist/yup-phone.cjs.js",
@@ -83,5 +83,8 @@
   },
   "peerDependencies": {
     "yup": "^0.27.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
