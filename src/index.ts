@@ -23,34 +23,38 @@ export default function phoneValidationMethod(
     ? `\${path} must be a valid phone number for region ${countryCode}`
     : '${path} must be a valid phone number.'; // eslint-disable-line no-template-curly-in-string
 
-  return this.test(YUP_METHOD, errMsg, (value: string) => {
-    if (!isValidCountryCode(countryCode)) {
-      // if not valid countryCode, then set default country to India (IN)
-      // eslint-disable-next-line no-param-reassign
-      countryCode = 'US';
-      // eslint-disable-next-line no-param-reassign
-      strict = false;
-    }
-
-    let isValid;
-    try {
-      const phoneNumber = phoneUtil.parseAndKeepRawInput(value, countryCode);
-      if (!phoneUtil.isPossibleNumber(phoneNumber)) {
-        return false;
+  return this.test({
+    name: YUP_METHOD,
+    message: errMsg,
+    test(value: string) {
+      if (!isValidCountryCode(countryCode)) {
+        // if not valid countryCode, then set default country to India (IN)
+        // eslint-disable-next-line no-param-reassign
+        countryCode = 'US';
+        // eslint-disable-next-line no-param-reassign
+        strict = false;
       }
 
-      const regionCodeFromPhoneNumber = phoneUtil.getRegionCodeForNumber(phoneNumber);
+      let isValid;
+      try {
+        const phoneNumber = phoneUtil.parseAndKeepRawInput(value, countryCode);
+        if (!phoneUtil.isPossibleNumber(phoneNumber)) {
+          return false;
+        }
 
-      /* check if the countryCode provided should be used as
-       default country code or strictly followed
-     */
-      isValid = strict
-        ? phoneUtil.isValidNumberForRegion(phoneNumber, countryCode)
-        : phoneUtil.isValidNumberForRegion(phoneNumber, regionCodeFromPhoneNumber);
-    } catch (error) {
-      isValid = false;
-    }
+        const regionCodeFromPhoneNumber = phoneUtil.getRegionCodeForNumber(phoneNumber);
 
-    return !!isValid;
+        /* check if the countryCode provided should be used as
+        default country code or strictly followed
+      */
+        isValid = strict
+          ? phoneUtil.isValidNumberForRegion(phoneNumber, countryCode)
+          : phoneUtil.isValidNumberForRegion(phoneNumber, regionCodeFromPhoneNumber);
+      } catch (error) {
+        isValid = false;
+      }
+
+      return this.resolve(isValid);
+    },
   });
 }
