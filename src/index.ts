@@ -32,20 +32,18 @@ export default function phoneValidationMethod(
       strict = false;
     }
 
-    const phoneNumber = phoneUtil.parseAndKeepRawInput(value, countryCode);
-
-    if (!phoneUtil.isPossibleNumber(phoneNumber)) {
-      return false;
-    }
-
-    const regionCodeFromPhoneNumber = phoneUtil.getRegionCodeForNumber(phoneNumber);
-
-    /* check if the countryCode provided should be used as
-       default country code or strictly followed
-     */
-
     let isValid;
     try {
+      const phoneNumber = phoneUtil.parseAndKeepRawInput(value, countryCode);
+      if (!phoneUtil.isPossibleNumber(phoneNumber)) {
+        return false;
+      }
+
+      const regionCodeFromPhoneNumber = phoneUtil.getRegionCodeForNumber(phoneNumber);
+
+      /* check if the countryCode provided should be used as
+       default country code or strictly followed
+     */
       isValid = strict
         ? phoneUtil.isValidNumberForRegion(phoneNumber, countryCode)
         : phoneUtil.isValidNumberForRegion(phoneNumber, regionCodeFromPhoneNumber);

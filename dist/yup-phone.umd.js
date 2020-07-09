@@ -108,24 +108,26 @@
 	  return this.test(YUP_METHOD, errMsg, function (value) {
 	    if (!isValidCountryCode(countryCode)) {
 	      // if not valid countryCode, then set default country to India (IN)
-	      countryCode = 'US';
+	      // eslint-disable-next-line no-param-reassign
+	      countryCode = 'US'; // eslint-disable-next-line no-param-reassign
+
 	      strict = false;
 	    }
-
-	    var phoneNumber = phoneUtil.parseAndKeepRawInput(value, countryCode);
-
-	    if (!phoneUtil.isPossibleNumber(phoneNumber)) {
-	      return false;
-	    }
-
-	    var regionCodeFromPhoneNumber = phoneUtil.getRegionCodeForNumber(phoneNumber);
-	    /* check if the countryCode provided should be used as
-	       default country code or strictly followed
-	     */
 
 	    var isValid;
 
 	    try {
+	      var phoneNumber = phoneUtil.parseAndKeepRawInput(value, countryCode);
+
+	      if (!phoneUtil.isPossibleNumber(phoneNumber)) {
+	        return false;
+	      }
+
+	      var regionCodeFromPhoneNumber = phoneUtil.getRegionCodeForNumber(phoneNumber);
+	      /* check if the countryCode provided should be used as
+	       default country code or strictly followed
+	      */
+
 	      isValid = strict ? phoneUtil.isValidNumberForRegion(phoneNumber, countryCode) : phoneUtil.isValidNumberForRegion(phoneNumber, regionCodeFromPhoneNumber);
 	    } catch (error) {
 	      isValid = false;
