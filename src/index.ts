@@ -27,6 +27,11 @@ export default function phoneValidationMethod(
     name: YUP_METHOD,
     message: errMsg,
     test(value: string) {
+      // eslint-disable-next-line no-underscore-dangle
+      if (this.schema._nullable && value === null) {
+        return this.resolve(true);
+      }
+
       if (!isValidCountryCode(countryCode)) {
         // if not valid countryCode, then set default country to India (IN)
         // eslint-disable-next-line no-param-reassign

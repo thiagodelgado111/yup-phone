@@ -171,4 +171,12 @@ describe('yup-phone validation', () => {
       .required();
     expect(phoneSchema.isValidSync('+65 6511 9266')).toBe(true);
   });
+
+  it('validate null phone number if defined as so', () => {
+    const phoneSchema = yup
+      .string()
+      .phone('SG')
+      .nullable();
+    expect(phoneSchema.isValidSync(null)).toBe(true);
+  });
 });
